@@ -5,10 +5,14 @@
 // - img - это строка;
 // - weapon - это массив строк (пока можно написать любое оружие, которое вы сможете придумать, не имеет пока значение какое);
 // - attack - это функция, внутри которой нужно поместить console.log, который будет выводить сконкатинированную строку имя вашего персонажа + fight (<имя вашего персонажа> + ‘Fight...’);
+const $arenas = document.querySelector('.arenas');
 
-const $player1 = {
+const $randomButton = document.querySelector ('.button');
+
+const player1 = {
    name: "Liu Kang",
-   hp: 90,
+   player:1,
+   hp: 100,
    img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
    weapon: ['katana', 'sword', 'ax'],
    attack: function () {
@@ -16,9 +20,10 @@ const $player1 = {
    },
 };
 
-const $player2 = {
+const player2 = {
    name: "Sub Zero",
-   hp: 50,
+   player:2,
+   hp: 100,
    img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
    weapon: ['ice', 'hands', 'legs'],
    attack: function () {
@@ -26,49 +31,101 @@ const $player2 = {
    },
 };
 
-console.log($player1);
+console.log(player1);
 
 
-function createPlayer(name,player,hp) {
+function createElement(tag,className) {
+   const $tag = document.createElement (tag);
 
-   const $arenas = document.querySelector('.arenas');
+   if (className) {
+      $tag.classList.add (className);
+   }
+   
+   return $tag;
+}
 
-   const $firstDiv = document.createElement('div');//создаем div
-   $firstDiv.classList.add(name); //добавляем класс
+function createPlayer(playerObj) {
 
-   $arenas.appendChild($firstDiv);
+   const $firstDiv = createElement ('div','player'+playerObj.player);
+   
 
-   const $progressBar = document.createElement('div');
-   $progressBar.classList.add('progressbar');
+   const $progressBar = createElement ('div','progressbar');
+   
 
    $firstDiv.appendChild($progressBar);
 
-   const $character = document.createElement('div');
-   $character.classList.add('character');
+   const $character = createElement ('div','character');
+   
 
    $firstDiv.appendChild($character);
 
-   const $life = document.createElement('div');
-   $life.classList.add('life');
+   const $life = createElement ('div','life');
+  
 
-   $life.style.width = hp + '%';
+   $life.style.width = playerObj.hp + '%';
 
    $progressBar.appendChild($life);
 
-   const $name = document.createElement('div');
-   $name.classList.add('name');
+   const $name = createElement ('div','name');
+   
 
-   $name.innerText = player.name;
+   $name.innerText = playerObj.name;
 
    $progressBar.appendChild($name);
 
-   const $characterImage = document.createElement('img');
-   $characterImage.src = player.img;
+   const $characterImage = createElement ('img');
+   $characterImage.src = playerObj.img;
 
    $character.appendChild($characterImage);
 
+   return $firstDiv;
 }
 
-createPlayer('player1',$player1,$player1.hp);
+function changeHP(player) {
+   const $playerLife = document.querySelector ('.player' + player.player +' .life');
+   // TASK2
+   // player.hp -= Math.ceil(Math.random ()*20);
+   // TASK1
+   // if (player.hp <= 0) {
+   //    $arenas.appendChild (playerLose (player.name));
+   //    player.hp = 0;
+   // }
+   player.hp -= Math.ceil(Math.random ()*20);
 
-createPlayer ('player2',$player2,$player2.hp);
+   if (player1.hp <=0 || player2.hp <=0) {
+      $randomButton.disabled = true;
+   }
+   // TASK3
+    if (player1.hp <= 0 && player2.hp >=0) {
+    $arenas.appendChild (playerWin (player2.name));
+    player1.hp = 0;
+   }else if (player2.hp <= 0 && player1.hp >=0) {
+   $arenas.appendChild (playerWin (player1.name));
+   player2.hp = 0;
+   }
+
+   $playerLife.style.width = player.hp + '%';
+
+  console.log (player.hp);
+}
+
+
+function playerWin(name) {
+   const $winTitle = createElement ('div','loseTitle');
+
+   $winTitle.innerText = name + ' Wins';
+
+   return $winTitle;
+}
+
+$randomButton.addEventListener ('click',function () {
+   console.log('#####');
+
+   changeHP (player1);
+   changeHP (player2);
+})
+
+$arenas.appendChild(createPlayer(player1));
+
+$arenas.appendChild(createPlayer(player2));
+
