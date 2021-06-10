@@ -7,7 +7,22 @@
 // - attack - это функция, внутри которой нужно поместить console.log, который будет выводить сконкатинированную строку имя вашего персонажа + fight (<имя вашего персонажа> + ‘Fight...’);
 const $arenas = document.querySelector('.arenas');
 
-const $randomButton = document.querySelector('.button');
+// const $randomButton = document.querySelector('.button');
+
+
+
+console.log($newButton);
+
+const $formFight = document.querySelector('.control');
+
+const HIT = {
+   head: 30,
+   body: 25,
+   foot: 20,
+}
+
+
+const ATTACK = ['head', 'body', 'foot'];
 
 
 const player1 = {
@@ -19,9 +34,9 @@ const player1 = {
    attack: function () {
       console.log(player.name + '' + 'Fight...');
    },
-   changeHP:changeHP,
-   elHP: elHP,
-   renderHP:renderHP,
+   changeHP,
+   elHP,
+   renderHP,
 };
 
 const player2 = {
@@ -33,15 +48,16 @@ const player2 = {
    attack: function () {
       console.log(player.name + '' + 'Fight...');
    },
-   changeHP:changeHP,
-   elHP: elHP,
-   renderHP:renderHP,
+   changeHP,
+   elHP,
+   renderHP,
 
 };
 
+
 function getRandom(number) {
    return Math.ceil(Math.random() * number);
-} 
+}
 
 function elHP() {
    return document.querySelector('.player' + this.player + ' .life');
@@ -51,6 +67,20 @@ function renderHP() {
    this.elHP().style.width = this.hp + '%';
 }
 
+function createReloadButton() {
+   const $reloadButtonDiv = createElement('div', 'reloadWrap');
+   const $reloadButton = createElement('button', 'button');
+   $reloadButton.innerText = 'Reload';
+
+   $reloadButton.addEventListener('click', function () {
+      window.location.reload()
+
+   });
+
+   $reloadButtonDiv.appendChild($reloadButton);
+
+   $arenas.appendChild($reloadButtonDiv);
+}
 
 
 
@@ -129,11 +159,84 @@ function playerWin(name) {
    return $winTitle;
 }
 
-$randomButton.addEventListener('click', function () {
-   console.log('#####');
+// $randomButton.addEventListener('click', function () {
+//    console.log('#####');
+
+//    if (player1.hp === 0 || player2.hp === 0) {
+//       $randomButton.disabled = true;
+//       createReloadButton();
+//    }
+
+//    if (player1.hp === 0 && player1.hp < player2.hp) {
+//       $arenas.appendChild(playerWin(player2.name));
+//    } else if (player2.hp === 0 && player2.hp < player1.hp) {
+//       $arenas.appendChild(playerWin(player1.name));
+//    } else if (player1.hp === 0 && player2.hp === 0) {
+//       $arenas.appendChild(playerWin());
+//    }
+//    player1.changeHP(getRandom(20));
+//    player1.renderHP();
+//    player2.changeHP(getRandom(20));
+//    player2.renderHP();
+// })
+
+function enemyAttack() {
+   const hit = ATTACK[getRandom(3) - 1];
+   const defence = ATTACK[getRandom(3) - 1];
+   console.log('#####:hit', hit);
+   console.log('#####:defence', defence);
+
+   return {
+      value: getRandom(HIT[hit]),
+      hit,
+      defence,
+   }
+}
+
+$formFight.addEventListener('submit', function (e) {
+   e.preventDefault();
+   console.dir($formFight);
+   const enemy = enemyAttack();
+   console.log('####:enemy', enemy);
+
+   const attack = {};
+
+   for (let item of $formFight) {
+      if (item.checked && item.name === 'hit') {
+         attack.value = getRandom(HIT[item.value]);
+         attack.hit = item.value;
+      }
+      if (item.checked && item.name === 'defence') {
+         attack.defence = item.value;
+      }
+      item.checked = false;
+   }
+});
+
+
+formFight.addEventListener('submit', function (e) {
+   e.preventDefault();
+   let firstPlayerAttack = attack();
+   let secondPlayerAttackObj = enemyAttack();
+
+   if (enemyAttackObj.hit != firstPlayerAttack.defence) {
+      player1.changeHP(secondPlayerAttackObj.value);
+      player1.renderHP();
+   }
+
+   if (attackObj.hit != enemyAttackObj.defence) {
+      player2.changeHP(attackObj.value);
+      player2.renderHP();
+   }
 
    if (player1.hp === 0 || player2.hp === 0) {
-      $randomButton.disabled = true;
+      const allInputs = document.querySelectorAll('.control input');
+      const attackButton = document.querySelector('.button');
+      for (let i = 0; i < inputs.length; i++) {
+         allInputs[i].disabled = 'disabled';
+      }
+      attackButton.disabled = 'disabled';
+      createReloadButton();
    }
 
    if (player1.hp === 0 && player1.hp < player2.hp) {
@@ -143,11 +246,8 @@ $randomButton.addEventListener('click', function () {
    } else if (player1.hp === 0 && player2.hp === 0) {
       $arenas.appendChild(playerWin());
    }
-   player1.changeHP(getRandom(20));
-   player1.renderHP ();
-   player2.changeHP(getRandom(20));
-   player2.renderHP ();
-})
+});
+
 
 $arenas.appendChild(createPlayer(player1));
 
