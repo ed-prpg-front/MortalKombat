@@ -219,13 +219,13 @@ formFight.addEventListener('submit', function (e) {
    let firstPlayerAttack = attack();
    let secondPlayerAttackObj = enemyAttack();
 
-   if (enemyAttackObj.hit != firstPlayerAttack.defence) {
+   if (secondPlayerAttackObj.hit != firstPlayerAttack.defence) {
       player1.changeHP(secondPlayerAttackObj.value);
       player1.renderHP();
    }
 
-   if (attackObj.hit != enemyAttackObj.defence) {
-      player2.changeHP(attackObj.value);
+   if (firstPlayerAttack.hit != enemyAttackObj.defence) {
+      player2.changeHP(firstPlayerAttack.value);
       player2.renderHP();
    }
 
