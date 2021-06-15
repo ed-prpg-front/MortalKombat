@@ -221,18 +221,18 @@ function showResult () {
       createReloadButton();
    }
 
-  if (player1.hp === 0 && player1.hp < player2.hp) {
-       $arenas.appendChild(playerWin(player2.name));
+   if (player1.hp === 0 && player1.hp < player2.hp) {
+      $arenas.appendChild(playerWin(player2.name));
+      generateLogs('end', player2, player1);
     } else if (player2.hp === 0 && player2.hp < player1.hp) {
       $arenas.appendChild(playerWin(player1.name));
-   } else if (player1.hp === 0 && player2.hp === 0) {
-     $arenas.appendChild(playerWin());
+      generateLogs('end', player1, player2);
+    } else if (player1.hp === 0 && player2.hp === 0) {
+      $arenas.appendChild(playerWin());
+      generateLogs('draw');
     }
-   player1.changeHP(getRandom(number));
-   player1.renderHP();
-   player2.changeHP(getRandom(number));
-   player2.renderHP();
-}
+  }
+
 
 function generateLogs (type,player1,player2) {
    // let text = logs[type].replace(['playerKick'],player1.name).replace(['playerDefence'],player2.name)
@@ -272,6 +272,8 @@ function generateLogs (type,player1,player2) {
       text = logs[type];
       el = `<p>${text}</p>`;
       break;
+      default:
+      el = `<p>Something interesting</p>`;
    }
    $chat.insertAdjacentHTML('afterbegin',el);
    }  
@@ -290,9 +292,10 @@ $formFight.addEventListener('submit', function (e) {
    if (enemy.defence != enemy.hit) {
       player2.changeHP (player.value);
       player2.renderHP ();
-      generateLogs ('end',player1,player2);
-   }
-
+      generateLogs ('hit',player1,player2);
+   } else if (enemy.defence === player.hit) {
+      generateLogs('defence', player1, player2);
+    }
    showResult ();
  });
 
