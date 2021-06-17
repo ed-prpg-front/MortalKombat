@@ -1,6 +1,6 @@
 import {  $randomButton, $arenas } from "./elements.js";
 import { player1, player2 } from "./players.js";
-import createReloadButton from "./restart.js";
+import createReloadButton from "./createReload.js";
 import playerWin from "./winner.js";
 import generateLogs from "./generate-logs.js";
 

@@ -1,8 +1,8 @@
-import { player1, player2 } from './player.js';
+import { player1, player2 } from './players.js';
 import { enemyAttack,playerAttack } from './fight.js';
 import {$formFight,$arenas } from './elements.js';
 
-import createPlayer from './create-player.js';
+import {createPlayer} from './create-player.js';
 import generateLogs from './generate-logs.js';
 import showResult from './show-result.js';
 

@@ -1,3 +1,3 @@
-const getRandom = (num) => Math.ceil(Math.random() * num);
-
-export default getRandom;
+export function getRandom(number) {
+   return Math.ceil(Math.random() * number);
+}

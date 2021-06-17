@@ -1,5 +1,6 @@
 import { HIT, ATTACK } from './const.js';
-import { getRandom } from './utils.js';
+import  {getRandom}  from './utils.js';
+import {$formFight} from './elements.js'
 
 
 const enemyAttack = () => {
